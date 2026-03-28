@@ -1,0 +1,22 @@
+# Python cache files
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environments
+.env
+.venv
+.Python
+
+# VS Code settings
+.vscode/
+
+# Docker-related local overrides
+docker-compose.override.yml
+
+# Excel output files
+data/results_output.xlsx
+
+# OS files
+.DS_Store
