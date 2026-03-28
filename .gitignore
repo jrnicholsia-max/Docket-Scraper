@@ -12,8 +12,5 @@ __pycache__/
 # VS Code settings
 .vscode/
 
-# Docker-related local overrides
-docker-compose.override.yml
-
 # OS files
 .DS_Store
