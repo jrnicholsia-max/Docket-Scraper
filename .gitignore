@@ -15,8 +15,5 @@ __pycache__/
 # Docker-related local overrides
 docker-compose.override.yml
 
-# Excel output files
-data/results_output.xlsx
-
 # OS files
 .DS_Store
