@@ -1,19 +1,23 @@
 # Docket Scraper
 
-A small Python project that reads docket numbers from an Excel file, queries the FERC eLibrary, and writes results back to Excel.
+A Python project that reads docket numbers from an Excel file, fetches filings from docket systems, and writes results to a dated Excel file in the user's Downloads folder.
+
+## Supported docket systems
+
+- FERC
+- Illinois Commerce Commission
 
 ## Repository layout
 
-- `main.py` - application entry point
-- `adapters/` - folder for adapters, which include docket system-specific request and response parsing
+- `main.py` - application entry point; for example, call `main(adapter="ferc")`
+- `adapters/` - adapter (scraper or API) for supported docket systems
 - `data_io.py` - input/output (i/o) utilities
-- `data/` - folder for i/o data files
+- `data/` - input file (`dockets_input.xlsx`) and output template (`results_output.xlsx`)
 - `paths.py` - file paths for i/o data files
 - `requirements.txt` - Python dependencies
 
 ## Future priorities
 
-- Expanding to state-level Public Utility Commission docket systems, prioritizing states in Northeast (New York and New England) and PJM Interconnection footprint
-- Enhancing usability (especially in updating and using the i/o data files) and providing instructions for users unfamiliar with Python
-- Improving filters to screen out low-importance filings (e.g., petitition to intervene, request to update service list, etc.)
-- Improving output for user-specific workflow (e.g., comment summaries in Eyes & Ears)
+- Expanding to additional state-level Public Utility Commission docket systems, prioritizing states in the Northeast (New York and New England) and PJM Interconnection footprint
+- Improving filters to screen out low-importance filings (e.g., petitions to intervene, requests to update service list)
+- Improving output for user-specific workflows (e.g., comment summaries)
