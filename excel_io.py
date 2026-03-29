@@ -1,9 +1,10 @@
+from paths import input_path, output_path
 import os
 from datetime import date, datetime
 from openpyxl import Workbook, load_workbook
 
 
-def format_date_to_api(value):
+def format_date(value):
     """Convert a worksheet date or string into ISO format for the API."""
     if isinstance(value, date):
         return value.isoformat()
@@ -23,9 +24,9 @@ def format_date_to_api(value):
     raise ValueError(f"Unsupported start date format: {value!r}")
 
 
-def load_dockets_excel(path="data/dockets_input.xlsx"):
+def load_dockets():
     """Load docket numbers and start dates from the Excel worksheet."""
-    workbook = load_workbook(path)
+    workbook = load_workbook(input_path)
     worksheet = workbook.active
     docket_rows = []
 
@@ -48,19 +49,10 @@ def load_dockets_excel(path="data/dockets_input.xlsx"):
     return workbook, docket_rows
 
 
-def load_results_workbook(path="data/results_output.xlsx"):
-    """Load the results workbook, clear non-TEMPLATE sheets, and verify TEMPLATE exists.
+def load_results():
+    """Load the results workbook, clear non-TEMPLATE sheets, and verify TEMPLATE exists."""
 
-    If the workbook does not exist, create a new workbook with a TEMPLATE sheet.
-    """
-    if not os.path.exists(path):
-        os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
-        workbook = Workbook()
-        template = workbook.active
-        template.title = "TEMPLATE"
-        workbook.save(path)
-    else:
-        workbook = load_workbook(path)
+    workbook = load_workbook(output_path)
 
     if "TEMPLATE" not in workbook.sheetnames:
         raise ValueError(f"{path} must contain a sheet named 'TEMPLATE'.")
@@ -72,7 +64,7 @@ def load_results_workbook(path="data/results_output.xlsx"):
     return workbook
 
 
-def create_docket_result_sheet(workbook, docket, records, template_name="TEMPLATE"):
+def create_result_sheet(workbook, docket, records, template_name="TEMPLATE"):
     """Create or replace a docket sheet left of TEMPLATE and populate it."""
     if docket in workbook.sheetnames:
         workbook.remove(workbook[docket])

@@ -8,4 +8,5 @@ A small Python project that reads docket numbers from an Excel file, queries the
 - `ferc_api.py` - FERC API request and response parsing
 - `excel_io.py` - Excel input/output utilities
 - `data/` - folder for input/output Excel files
+- `paths.py` - file paths for input/output Excel files
 - `requirements.txt` - Python dependencies
