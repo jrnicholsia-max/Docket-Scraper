@@ -5,7 +5,7 @@ A small Python project that reads docket numbers from an Excel file, queries the
 ## Repository layout
 
 - `main.py` - application entry point
-- `ferc_api.py` - FERC API request and response parsing
+- `api_modules/` - folder for API modules, which include docket system-specific request and response parsing
 - `data_io.py` - input/output (i/o) utilities
 - `data/` - folder for i/o data files
 - `paths.py` - file paths for i/o data files
