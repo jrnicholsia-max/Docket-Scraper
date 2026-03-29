@@ -80,13 +80,13 @@ def load_results():
     return workbook
 
 
-def build_run_output_path(api_key, run_date=None):
-    """Build a dated output filename for the current run in the data directory."""
+def build_run_output_path(adapter_key, run_date=None):
+    """Build a dated output filename saved to the user's Downloads folder."""
     run_day = run_date or date.today()
     stamp = run_day.strftime("%m.%d.%Y")
-    output_dir = Path(output_path).parent
-    filename = f"{str(api_key).strip().lower()}-{stamp}.xlsx"
-    return str(output_dir / filename)
+    downloads_dir = Path.home() / "Downloads"
+    filename = f"{str(adapter_key).strip().lower()}-{stamp}.xlsx"
+    return str(downloads_dir / filename)
 
 
 def create_result_sheet(workbook, docket, records, template_name="TEMPLATE"):

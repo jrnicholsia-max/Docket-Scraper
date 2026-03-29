@@ -4,46 +4,46 @@ from data_io import (format_date, load_dockets,
 from datetime import date
 from importlib import import_module
 
-API_DEFINITIONS = {
+ADAPTER_DEFINITIONS = {
     "ferc": {
-        "module": "api_modules.ferc_api",
+        "module": "adapters.ferc_adapter",
         "input_sheet": "ferc",
     },
     "illinois": {
-        "module": "api_modules.il_api",
+        "module": "adapters.il_adapter",
         "input_sheet": "illinois",
     },
 }
 
-API_ALIASES = {
+ADAPTER_ALIASES = {
     "il": "illinois",
 }
 
-ALLOWED_APIS = {
-    **{api_name: config["module"] for api_name, config in API_DEFINITIONS.items()},
-    **{alias: API_DEFINITIONS[target]["module"] for alias, target in API_ALIASES.items()},
+ALLOWED_ADAPTERS = {
+    **{adapter_name: config["module"] for adapter_name, config in ADAPTER_DEFINITIONS.items()},
+    **{alias: ADAPTER_DEFINITIONS[target]["module"] for alias, target in ADAPTER_ALIASES.items()},
 }
 
 
-def get_api_config(api_key):
-    normalized_api = str(api_key).strip().lower()
-    canonical_api = API_ALIASES.get(normalized_api, normalized_api)
-    if canonical_api not in API_DEFINITIONS:
-        raise ValueError(f"Unsupported API: {api_key}")
-    return API_DEFINITIONS[canonical_api]
+def get_adapter_config(adapter_key):
+    normalized = str(adapter_key).strip().lower()
+    canonical = ADAPTER_ALIASES.get(normalized, normalized)
+    if canonical not in ADAPTER_DEFINITIONS:
+        raise ValueError(f"Unsupported adapter: {adapter_key}")
+    return ADAPTER_DEFINITIONS[canonical]
 
-def load_api(api_key):
-    module_name = get_api_config(api_key)["module"]
+def load_adapter(adapter_key):
+    module_name = get_adapter_config(adapter_key)["module"]
     return import_module(module_name)
 
-def main(api="ferc"):
-    api_config = get_api_config(api)
-    api_module = load_api(api)
-    input_sheet = api_config["input_sheet"]
-    run_output_path = build_run_output_path(api)
+def main(adapter="ferc"):
+    adapter_config = get_adapter_config(adapter)
+    adapter_module = load_adapter(adapter)
+    input_sheet = adapter_config["input_sheet"]
+    run_output_path = build_run_output_path(adapter)
     print(
         f"Using INPUT_FILE={input_path}, TEMPLATE_OUTPUT_FILE={output_path}, "
-        f"RUN_OUTPUT_FILE={run_output_path}, API={api}, INPUT_SHEET={input_sheet}"
+        f"RUN_OUTPUT_FILE={run_output_path}, ADAPTER={adapter}, INPUT_SHEET={input_sheet}"
     )
 
     try:
@@ -72,12 +72,12 @@ def main(api="ferc"):
 
         print(f"Processing docket {docket} starting {start_date}...")
         try:
-            data = api_module.fetch_search_results(docket, start_date)
+            data = adapter_module.fetch_search_results(docket, start_date)
         except Exception as exc:
             print(f"Fetch failed for {docket}: {exc}")
             continue
 
-        records = api_module.parse_search_hits(data)
+        records = adapter_module.parse_search_hits(data)
         if records:
             create_result_sheet(results_workbook, docket, records)
             print(f"Wrote {len(records)} records to {run_output_path} sheet '{docket}'.")
@@ -93,4 +93,4 @@ def main(api="ferc"):
     print(f"Updated start dates in {input_path} and saved {run_output_path}.")
 
 if __name__ == "__main__":
-    main(api="ferc")
+    main(adapter="ferc")
